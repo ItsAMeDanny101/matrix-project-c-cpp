@@ -2,41 +2,44 @@
 #include "matrix.h"
 
 int main() {
-    int A_vals[2][2] = {
+    // values for matrix A (2x2)
+    int matrixAValues[2][2] = {
         {6, 4},
         {8, 3}
     };
 
-    int B_vals[2][3] = {
+    // values for matrix B (2x3)
+    int matrixBValues[2][3] = {
         {1, 2, 3},
         {4, 5, 6}
     };
 
-    int C_vals[2][3] = {
+    // values for matrix C (2x3)
+    int matrixCValues[2][3] = {
         {2, 4, 6},
         {1, 3, 5}
     };
 
-    Matrix A = createFromArray(2, 2, A_vals);
-    Matrix B = createFromArray(2, 3, B_vals);
-    Matrix C = createFromArray(2, 3, C_vals);
+    Matrix matrixA = createFromArray(2, 2, matrixAValues);
+    Matrix matrixB = createFromArray(2, 3, matrixBValues);
+    Matrix matrixC = createFromArray(2, 3, matrixCValues);
 
-    Matrix CT = transpose(C);
-    Matrix B3 = scalarMultiply(B, 3);
-    Matrix prod = multiply(B3, CT);
-    Matrix D = add(A, prod);
+    Matrix matrixCTranspose = transpose(matrixC);
+    Matrix matrixBScaled = scalarMultiply(matrixB, 3);
+    Matrix matrixProduct = multiply(matrixBScaled, matrixCTranspose);
+    Matrix matrixD = add(matrixA, matrixProduct);
 
     printf("Result D = A + (3 * B) * Cᵀ:\n");
-    printMatrix(D);
+    printMatrix(matrixD);
 
-    // Clean up memory
-    freeMatrix(A);
-    freeMatrix(B);
-    freeMatrix(C);
-    freeMatrix(CT);
-    freeMatrix(B3);
-    freeMatrix(prod);
-    freeMatrix(D);
+    // free all matrix memory
+    freeMatrix(matrixA);
+    freeMatrix(matrixB);
+    freeMatrix(matrixC);
+    freeMatrix(matrixCTranspose);
+    freeMatrix(matrixBScaled);
+    freeMatrix(matrixProduct);
+    freeMatrix(matrixD);
 
     return 0;
 }

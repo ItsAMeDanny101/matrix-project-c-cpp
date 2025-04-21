@@ -1,56 +1,71 @@
 #include "Matrix.h"
 #include <iostream>
+using namespace std;
 
-Matrix::Matrix(int rows, int cols) : rows(rows), cols(cols) {
-    data.resize(rows, std::vector<int>(cols, 0));
+// makes a matrix filled with zeros
+Matrix::Matrix(int inputRows, int inputCols) : rows(inputRows), cols(inputCols) {
+    data.resize(rows, vector<int>(cols, 0));
 }
 
-Matrix::Matrix(std::vector<std::vector<int>> values) {
+// makes a matrix from given values
+Matrix::Matrix(vector<vector<int>> values) {
     data = values;
     rows = data.size();
     cols = data[0].size();
 }
 
+// returns the transpose of the matrix
 Matrix Matrix::transpose() const {
-    Matrix result(cols, rows);
-    for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            result.data[j][i] = data[i][j];
-    return result;
+    Matrix transposedMatrix(cols, rows);
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            transposedMatrix.data[colIndex][rowIndex] = data[rowIndex][colIndex];
+        }
+    }
+    return transposedMatrix;
 }
 
-Matrix Matrix::operator*(const Matrix& other) const {
-    Matrix result(rows, other.cols);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < other.cols; j++) {
-            for (int k = 0; k < cols; k++) {
-                result.data[i][j] += data[i][k] * other.data[k][j];
+// multiplies this matrix by another matrix
+Matrix Matrix::operator*(const Matrix& otherMatrix) const {
+    Matrix multipliedMatrix(rows, otherMatrix.cols);
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < otherMatrix.cols; colIndex++) {
+            for (int innerIndex = 0; innerIndex < cols; innerIndex++) {
+                multipliedMatrix.data[rowIndex][colIndex] += data[rowIndex][innerIndex] * otherMatrix.data[innerIndex][colIndex];
             }
         }
     }
-    return result;
+    return multipliedMatrix;
 }
 
-Matrix Matrix::operator+(const Matrix& other) const {
-    Matrix result(rows, cols);
-    for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            result.data[i][j] = data[i][j] + other.data[i][j];
-    return result;
+// adds this matrix with another matrix
+Matrix Matrix::operator+(const Matrix& otherMatrix) const {
+    Matrix sumMatrix(rows, cols);
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            sumMatrix.data[rowIndex][colIndex] = data[rowIndex][colIndex] + otherMatrix.data[rowIndex][colIndex];
+        }
+    }
+    return sumMatrix;
 }
 
+// multiplies this matrix by a number
 Matrix Matrix::operator*(int scalar) const {
-    Matrix result(rows, cols);
-    for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            result.data[i][j] = data[i][j] * scalar;
-    return result;
+    Matrix scaledMatrix(rows, cols);
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            scaledMatrix.data[rowIndex][colIndex] = data[rowIndex][colIndex] * scalar;
+        }
+    }
+    return scaledMatrix;
 }
 
+// prints the matrix to the console
 void Matrix::print() const {
-    for (const auto& row : data) {
-        for (int val : row)
-            std::cout << val << " ";
-        std::cout << std::endl;
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            cout << data[rowIndex][colIndex] << " ";
+        }
+        cout << endl;
     }
 }

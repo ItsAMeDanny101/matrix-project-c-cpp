@@ -1,31 +1,38 @@
-#include "Matrix.h"
 #include <iostream>
+#include "Matrix.h"
+
+using namespace std;
 
 int main() {
-    std::vector<std::vector<int>> A_vals = {
+    // define matrix A (2x2)
+    vector<vector<int>> matrixAValues = {
         {6, 4},
         {8, 3}
     };
 
-    std::vector<std::vector<int>> B_vals = {
+    // define matrix B (2x3)
+    vector<vector<int>> matrixBValues = {
         {1, 2, 3},
         {4, 5, 6}
     };
 
-    std::vector<std::vector<int>> C_vals = {
+    // define matrix C (2x3)
+    vector<vector<int>> matrixCValues = {
         {2, 4, 6},
         {1, 3, 5}
     };
 
-    Matrix A(A_vals);
-    Matrix B(B_vals);
-    Matrix C(C_vals);
+    Matrix matrixA(matrixAValues);
+    Matrix matrixB(matrixBValues);
+    Matrix matrixC(matrixCValues);
 
-    Matrix CT = C.transpose();
-    Matrix result = A + (B * 3) * CT;
+    Matrix matrixCTranspose = matrixC.transpose();
+    Matrix matrixBScaled = matrixB * 3;
+    Matrix matrixProduct = matrixBScaled * matrixCTranspose;
+    Matrix matrixD = matrixA + matrixProduct;
 
-    std::cout << "Result D = A + (3 * B) * Cᵀ:\n";
-    result.print();
+    cout << "Result D = A + (3 * B) * Cᵀ:" << endl;
+    matrixD.print();
 
     return 0;
 }

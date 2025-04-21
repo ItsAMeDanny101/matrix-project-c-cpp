@@ -2,21 +2,34 @@
 #define MATRIX_H
 
 #include <vector>
+using namespace std;
 
+// this class represents a 2d matrix
 class Matrix {
 private:
-    std::vector<std::vector<int>> data;
+    vector<vector<int>> data;
     int rows, cols;
 
 public:
-    Matrix(int rows, int cols);
-    Matrix(std::vector<std::vector<int>> values);
+    // creates a matrix with zero values
+    Matrix(int inputRows, int inputCols);
 
+    // creates a matrix from given values
+    Matrix(vector<vector<int>> values);
+
+    // returns the transpose of the matrix
     Matrix transpose() const;
-    Matrix operator*(const Matrix& other) const;
-    Matrix operator+(const Matrix& other) const;
+
+    // multiplies this matrix with another matrix
+    Matrix operator*(const Matrix& otherMatrix) const;
+
+    // adds this matrix to another matrix
+    Matrix operator+(const Matrix& otherMatrix) const;
+
+    // multiplies this matrix with a number
     Matrix operator*(int scalar) const;
 
+    // prints the matrix to the screen
     void print() const;
 };
 

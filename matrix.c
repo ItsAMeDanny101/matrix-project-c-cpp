@@ -2,72 +2,90 @@
 #include <stdlib.h>
 #include "matrix.h"
 
+// creates an empty matrix with all zeros
 Matrix createMatrix(int rows, int cols) {
-    Matrix m;
-    m.rows = rows;
-    m.cols = cols;
-    m.data = (int**)malloc(rows * sizeof(int*));
-    for (int i = 0; i < rows; i++) {
-        m.data[i] = (int*)malloc(cols * sizeof(int));
+    Matrix newMatrix;
+    newMatrix.rows = rows;
+    newMatrix.cols = cols;
+    newMatrix.data = (int**)malloc(rows * sizeof(int*));
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        newMatrix.data[rowIndex] = (int*)malloc(cols * sizeof(int));
     }
-    return m;
+    return newMatrix;
 }
 
+// creates a matrix from a 2d array
 Matrix createFromArray(int rows, int cols, int values[rows][cols]) {
-    Matrix m = createMatrix(rows, cols);
-    for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            m.data[i][j] = values[i][j];
-    return m;
+    Matrix newMatrix = createMatrix(rows, cols);
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < cols; colIndex++) {
+            newMatrix.data[rowIndex][colIndex] = values[rowIndex][colIndex];
+        }
+    }
+    return newMatrix;
 }
 
-Matrix transpose(Matrix m) {
-    Matrix t = createMatrix(m.cols, m.rows);
-    for (int i = 0; i < m.rows; i++)
-        for (int j = 0; j < m.cols; j++)
-            t.data[j][i] = m.data[i][j];
-    return t;
+// returns the transpose of a matrix
+Matrix transpose(Matrix inputMatrix) {
+    Matrix transposedMatrix = createMatrix(inputMatrix.cols, inputMatrix.rows);
+    for (int rowIndex = 0; rowIndex < inputMatrix.rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < inputMatrix.cols; colIndex++) {
+            transposedMatrix.data[colIndex][rowIndex] = inputMatrix.data[rowIndex][colIndex];
+        }
+    }
+    return transposedMatrix;
 }
 
-Matrix scalarMultiply(Matrix m, int scalar) {
-    Matrix result = createMatrix(m.rows, m.cols);
-    for (int i = 0; i < m.rows; i++)
-        for (int j = 0; j < m.cols; j++)
-            result.data[i][j] = m.data[i][j] * scalar;
-    return result;
+// multiplies every element in a matrix by a number
+Matrix scalarMultiply(Matrix inputMatrix, int scalar) {
+    Matrix scaledMatrix = createMatrix(inputMatrix.rows, inputMatrix.cols);
+    for (int rowIndex = 0; rowIndex < inputMatrix.rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < inputMatrix.cols; colIndex++) {
+            scaledMatrix.data[rowIndex][colIndex] = inputMatrix.data[rowIndex][colIndex] * scalar;
+        }
+    }
+    return scaledMatrix;
 }
 
-Matrix multiply(Matrix a, Matrix b) {
-    Matrix result = createMatrix(a.rows, b.cols);
-    for (int i = 0; i < a.rows; i++) {
-        for (int j = 0; j < b.cols; j++) {
-            result.data[i][j] = 0;
-            for (int k = 0; k < a.cols; k++) {
-                result.data[i][j] += a.data[i][k] * b.data[k][j];
+// multiplies two matrices together
+Matrix multiply(Matrix matrixA, Matrix matrixB) {
+    Matrix resultMatrix = createMatrix(matrixA.rows, matrixB.cols);
+    for (int rowIndex = 0; rowIndex < matrixA.rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < matrixB.cols; colIndex++) {
+            resultMatrix.data[rowIndex][colIndex] = 0;
+            for (int k = 0; k < matrixA.cols; k++) {
+                resultMatrix.data[rowIndex][colIndex] += matrixA.data[rowIndex][k] * matrixB.data[k][colIndex];
             }
         }
     }
-    return result;
+    return resultMatrix;
 }
 
-Matrix add(Matrix a, Matrix b) {
-    Matrix result = createMatrix(a.rows, a.cols);
-    for (int i = 0; i < a.rows; i++)
-        for (int j = 0; j < a.cols; j++)
-            result.data[i][j] = a.data[i][j] + b.data[i][j];
-    return result;
+// adds two matrices together
+Matrix add(Matrix matrixA, Matrix matrixB) {
+    Matrix sumMatrix = createMatrix(matrixA.rows, matrixA.cols);
+    for (int rowIndex = 0; rowIndex < matrixA.rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < matrixA.cols; colIndex++) {
+            sumMatrix.data[rowIndex][colIndex] = matrixA.data[rowIndex][colIndex] + matrixB.data[rowIndex][colIndex];
+        }
+    }
+    return sumMatrix;
 }
 
-void printMatrix(Matrix m) {
-    for (int i = 0; i < m.rows; i++) {
-        for (int j = 0; j < m.cols; j++)
-            printf("%d ", m.data[i][j]);
+// prints the matrix to the screen
+void printMatrix(Matrix matrixToPrint) {
+    for (int rowIndex = 0; rowIndex < matrixToPrint.rows; rowIndex++) {
+        for (int colIndex = 0; colIndex < matrixToPrint.cols; colIndex++) {
+            printf("%d ", matrixToPrint.data[rowIndex][colIndex]);
+        }
         printf("\n");
     }
 }
 
-void freeMatrix(Matrix m) {
-    for (int i = 0; i < m.rows; i++)
-        free(m.data[i]);
-    free(m.data);
+// frees the memory used by a matrix
+void freeMatrix(Matrix matrixToFree) {
+    for (int rowIndex = 0; rowIndex < matrixToFree.rows; rowIndex++) {
+        free(matrixToFree.data[rowIndex]);
+    }
+    free(matrixToFree.data);
 }
